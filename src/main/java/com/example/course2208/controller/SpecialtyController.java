@@ -31,9 +31,20 @@ public class SpecialtyController {
         return specialtyService.getMostStudentsSpecialty();
     }
 
-    @GetMapping("averageGrade")
+    @GetMapping("averageGrade/{specialtyId}")
     public Integer getAverageGradeAllStudents(@PathVariable Integer specialtyId)
             throws SpecialtyNotFoundException, NoGradesException {
         return specialtyService.getAverageGradeAllStudents(specialtyId);
+    }
+
+    @GetMapping("highestGradedStudent")
+    public Student getHighestGradedStudent() {
+        return specialtyService.getHighestGradedStudent();
+    }
+
+    @GetMapping("highestGradedStudent/{specialtyId}")
+    public Student getHighestGradedStudentBySpecialty(@PathVariable Integer specialtyId)
+            throws NoGradesException, SpecialtyNotFoundException {
+        return specialtyService.getHighestGradedStudentBySpecialty(specialtyId);
     }
 }

@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SpecialtyService {
     private final SpecialtyRepository specialtyRepository;
 
-    public List<Student> getAllStudentBySpecialty(Integer specialtyId) throws SpecialtyNotFoundException {
+    public List<Student> getAllStudentBySpecialty(Integer specialtyId)
+            throws SpecialtyNotFoundException {
         Optional<Specialty> tmpOptionalSpecialty = specialtyRepository.findById(specialtyId);
         if (tmpOptionalSpecialty.isEmpty()) {
             throw new SpecialtyNotFoundException();
@@ -46,6 +48,35 @@ public class SpecialtyService {
             throw new SpecialtyNotFoundException();
         } else {
             return tmpOptionalSpecialty.get().getAverageGradeAllStudents();
+        }
+    }
+
+    public Student getHighestGradedStudent() {
+        return specialtyRepository.findAll()
+                .stream()
+                .map(sp -> {
+                    try {
+                        return sp.getHighestGradedStudent();
+                    } catch (NoGradesException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).max(Comparator.comparingInt(stud -> {
+                    try {
+                        return stud.getAnnualAverageGrade();
+                    } catch (NoGradesException e) {
+                        throw new RuntimeException(e);
+                    }
+                })).get();
+    }
+
+    public Student getHighestGradedStudentBySpecialty(Integer specialtyId)
+            throws SpecialtyNotFoundException, NoGradesException {
+
+        Optional<Specialty> tmpOptionalSpecialty = specialtyRepository.findById(specialtyId);
+        if (tmpOptionalSpecialty.isEmpty()) {
+            throw new SpecialtyNotFoundException();
+        } else {
+            return tmpOptionalSpecialty.get().getHighestGradedStudent();
         }
     }
 }

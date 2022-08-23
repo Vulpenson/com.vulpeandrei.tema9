@@ -31,4 +31,15 @@ public class Specialty {
         }
         return averageGrade/students.size();
     }
+
+    public Student getHighestGradedStudent() throws NoGradesException {
+        Student highestGradedStudent = new Student();
+        highestGradedStudent.getGrades().add(new Grade(0,0));
+        for (Student student : students) {
+            if (student.getAnnualAverageGrade() > highestGradedStudent.getAnnualAverageGrade()) {
+                highestGradedStudent = student;
+            }
+        }
+        return highestGradedStudent;
+    }
 }
