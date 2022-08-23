@@ -1,6 +1,9 @@
 package com.example.course2208.controller;
 
+import com.example.course2208.exception.NoGradesException;
+import com.example.course2208.exception.NoSpecialtiesException;
 import com.example.course2208.exception.SpecialtyNotFoundException;
+import com.example.course2208.model.Specialty;
 import com.example.course2208.model.Student;
 import com.example.course2208.service.SpecialtyService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +24,16 @@ public class SpecialtyController {
     public List<Student> getAllStudentBySpecialty(@PathVariable Integer specialtyId)
             throws SpecialtyNotFoundException {
         return specialtyService.getAllStudentBySpecialty(specialtyId);
+    }
+
+    @GetMapping("mostStudents")
+    public Specialty getMostStudentsSpecialty() throws NoSpecialtiesException {
+        return specialtyService.getMostStudentsSpecialty();
+    }
+
+    @GetMapping("averageGrade")
+    public Integer getAverageGradeAllStudents(@PathVariable Integer specialtyId)
+            throws SpecialtyNotFoundException, NoGradesException {
+        return specialtyService.getAverageGradeAllStudents(specialtyId);
     }
 }

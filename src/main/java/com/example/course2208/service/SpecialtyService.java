@@ -1,5 +1,6 @@
 package com.example.course2208.service;
 
+import com.example.course2208.exception.NoGradesException;
 import com.example.course2208.exception.NoSpecialtiesException;
 import com.example.course2208.exception.SpecialtyNotFoundException;
 import com.example.course2208.model.Specialty;
@@ -34,6 +35,17 @@ public class SpecialtyService {
             throw new NoSpecialtiesException();
         } else {
             return tmpSpecialty.get();
+        }
+    }
+
+    public Integer getAverageGradeAllStudents(Integer specialtyId)
+            throws SpecialtyNotFoundException, NoGradesException {
+
+        Optional<Specialty> tmpOptionalSpecialty = specialtyRepository.findById(specialtyId);
+        if (tmpOptionalSpecialty.isEmpty()) {
+            throw new SpecialtyNotFoundException();
+        } else {
+            return tmpOptionalSpecialty.get().getAverageGradeAllStudents();
         }
     }
 }
